@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { SITE_CONFIG } from "@/lib/constants"
 import { Code2, Server, Cloud } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -14,59 +14,86 @@ interface StarParticle {
 export function LandingHero() {
   const [particles, setParticles] = useState<StarParticle[]>([])
   const [mounted, setMounted] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   useEffect(() => {
     setMounted(true)
     const generateParticles = () => {
-      return Array.from({ length: 50 }, () => ({
+      // Reduce particle count on mobile
+      const particleCount = isMobile ? 20 : 50
+      return Array.from({ length: particleCount }, () => ({
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         opacity: 0.1 + Math.random() * 0.5
       }))
     }
     setParticles(generateParticles())
-  }, [])
+  }, [isMobile])
+
+  // Simplified animations for reduced motion/mobile
+  const baseTransition = { duration: prefersReducedMotion ? 0 : 0.8 }
+  const orbTransition = { 
+    duration: prefersReducedMotion ? 0 : 8, 
+    repeat: Infinity,
+    ease: "linear"
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20" id="hero">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         {/* Stars */}
-        {mounted && (
+        {mounted && !prefersReducedMotion && (
           <div className="absolute inset-0">
             {particles.map((particle, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 bg-white rounded-full"
-                initial={{ opacity: particle.opacity }}
-                animate={{ opacity: [particle.opacity, particle.opacity * 2, particle.opacity] }}
-                transition={{ duration: 2 + Math.random() * 3, repeat: Infinity }}
                 style={{
                   left: particle.left,
                   top: particle.top,
+                  opacity: particle.opacity,
+                  willChange: "transform, opacity",
+                  transform: "translateZ(0)"
+                }}
+                initial={false}
+                animate={{ 
+                  opacity: [particle.opacity, particle.opacity * 1.5, particle.opacity],
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "linear"
                 }}
               />
             ))}
           </div>
         )}
         
-        {/* Glowing orbs */}
-        <motion.div
-          className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px]"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity, delay: 4 }}
-        />
+        {/* Glowing orbs - simplified for mobile */}
+        {!prefersReducedMotion && (
+          <>
+            <motion.div
+              className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]"
+              style={{ willChange: "transform", transform: "translateZ(0)" }}
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.2, 0.3, 0.2],
+              }}
+              transition={orbTransition}
+            />
+            <motion.div
+              className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px]"
+              style={{ willChange: "transform", transform: "translateZ(0)" }}
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.2, 0.3, 0.2],
+              }}
+              transition={{ ...orbTransition, delay: 4 }}
+            />
+          </>
+        )}
       </div>
 
       {/* Content */}
@@ -75,7 +102,8 @@ export function LandingHero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={baseTransition}
+            style={{ willChange: "transform", transform: "translateZ(0)" }}
           >
             <h1 className="text-4xl font-bold tracking-tight sm:text-3xl lg:text-5xl">
               <span className="bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent">
@@ -91,7 +119,8 @@ export function LandingHero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ ...baseTransition, delay: 0.2 }}
+            style={{ willChange: "transform", transform: "translateZ(0)" }}
             className="mx-auto mt-6 max-w-2xl text-base sm:text-lg md:text-xl text-gray-400/80 leading-8"
           >
             {SITE_CONFIG.description}
@@ -108,7 +137,8 @@ export function LandingHero() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                transition={{ ...baseTransition, delay: 0.4 + index * 0.1 }}
+                style={{ willChange: "transform", transform: "translateZ(0)" }}
                 className="relative group px-4 py-3 sm:px-6 sm:py-4 rounded-2xl bg-blue-950/30 border border-blue-500/20 backdrop-blur-sm hover:border-blue-500/40 transition-all"
               >
                 <div className="flex flex-col items-center gap-3">
@@ -125,25 +155,28 @@ export function LandingHero() {
         </div>
       </div>
 
-      {/* Animated connection lines */}
-      <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
-        <motion.path
-          d="M 100 100 Q 300 0, 500 100 T 900 100"
-          stroke="url(#gradient)"
-          strokeWidth="2"
-          fill="none"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2, ease: "easeInOut" }}
-        />
-        <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.2)" />
-            <stop offset="50%" stopColor="rgba(147, 51, 234, 0.2)" />
-            <stop offset="100%" stopColor="rgba(59, 130, 246, 0.2)" />
-          </linearGradient>
-        </defs>
-      </svg>
+      {/* Animated connection lines - disabled on mobile and reduced motion */}
+      {!isMobile && !prefersReducedMotion && (
+        <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
+          <motion.path
+            d="M 100 100 Q 300 0, 500 100 T 900 100"
+            stroke="url(#gradient)"
+            strokeWidth="2"
+            fill="none"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            style={{ willChange: "transform", transform: "translateZ(0)" }}
+          />
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="rgba(59, 130, 246, 0.2)" />
+              <stop offset="50%" stopColor="rgba(147, 51, 234, 0.2)" />
+              <stop offset="100%" stopColor="rgba(59, 130, 246, 0.2)" />
+            </linearGradient>
+          </defs>
+        </svg>
+      )}
     </section>
   )
 } 

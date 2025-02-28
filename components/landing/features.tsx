@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { 
   Code2,
   Database,
@@ -52,14 +52,24 @@ const features = [
 ]
 
 export function LandingFeatures() {
+  const prefersReducedMotion = useReducedMotion()
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+  // Simplified animations for mobile/reduced motion
+  const baseTransition = { 
+    duration: prefersReducedMotion || isMobile ? 0 : 0.5,
+    ease: "easeOut"
+  }
+
   return (
     <section className="py-20 relative overflow-hidden" id="features">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          transition={baseTransition}
+          viewport={{ once: true, margin: "-100px" }}
+          style={{ willChange: "transform", transform: "translateZ(0)" }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent">
@@ -74,15 +84,21 @@ export function LandingFeatures() {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              transition={{ 
+                ...baseTransition,
+                delay: prefersReducedMotion ? 0 : index * 0.1
+              }}
+              viewport={{ once: true, margin: "-50px" }}
+              style={{ willChange: "transform", transform: "translateZ(0)" }}
               className="group"
             >
               <div className="relative p-6 bg-slate-900/20 backdrop-blur-sm rounded-2xl overflow-hidden">
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                {/* Gradient Background - Simplified for mobile */}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} transition-opacity duration-300 ${isMobile ? 'opacity-50' : 'opacity-0 group-hover:opacity-100'}`}
+                />
                 
                 {/* Content */}
                 <div className="relative z-10">
@@ -99,17 +115,23 @@ export function LandingFeatures() {
                   </p>
                 </div>
 
-                {/* Decorative Elements */}
-                <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-blue-600/5 rounded-full blur-2xl group-hover:from-blue-500/10 group-hover:to-blue-600/10 transition-colors duration-500" />
+                {/* Decorative Elements - Disabled on mobile */}
+                {!isMobile && (
+                  <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-gradient-to-br from-blue-500/5 to-blue-600/5 rounded-full blur-2xl group-hover:from-blue-500/10 group-hover:to-blue-600/10 transition-colors duration-300" />
+                )}
               </div>
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Background Elements */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+      {/* Background Elements - Simplified for mobile */}
+      {!isMobile && (
+        <>
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        </>
+      )}
     </section>
   )
 } 
