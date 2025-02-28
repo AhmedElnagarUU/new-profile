@@ -78,11 +78,11 @@ export function LandingHero() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-4xl font-bold tracking-tight sm:text-3xl lg:text-5xl">
-              <span className="bg-gradient-to-r from-white via-blue-900 to-white bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent">
                 Full Stack Developer
               </span>
               <br />
-              <span className="bg-gradient-to-r from-blue-100 via-blue-900 to-blue-100 bg-clip-text text-transparent mt-2 block">
+              <span className="bg-gradient-to-r from-blue-100 via-blue-400 to-blue-100 bg-clip-text text-transparent mt-2 block">
                 Building Digital Experiences
               </span>
             </h1>
