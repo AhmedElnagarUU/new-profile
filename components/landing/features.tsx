@@ -62,7 +62,7 @@ export function LandingFeatures() {
   }
 
   return (
-    <section className="py-20 relative overflow-hidden" id="features">
+    <section className="py-20 relative overflow-hidden" id="solutions">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

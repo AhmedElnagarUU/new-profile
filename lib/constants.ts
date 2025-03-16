@@ -1,20 +1,19 @@
 export const SITE_CONFIG = {
-  name: "Ahmed Youssry",
-  title: "Full Stack Developer",
-  description: "Building scalable web apps with modern tech. Expert in responsive UI, backend systems, and cloud solutions.",
+  name: "March",
+  title: "Digital Solutions",
+  description: "Empowering businesses through innovative digital solutions. We specialize in enterprise software development, cloud infrastructure, and digital transformation.",
   links: {
     github: "https://github.com/AhmedElnagarUU",
     linkedin: "https://www.linkedin.com/in/ahmed-elnagar-25561b262/",
-    facebook: "https://www.facebook.com/profile.php?id=100094263562406",
+    facebook: "https://www.facebook.com/profile.php?id=61574396781124",
     email: "ahmedelnagaruu@gmail.com"
   }
 }
 
 export const NAVIGATION = [
-  // { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#features" },
-  { name: "Skills", href: "#skills" },
+  { name: "Solutions", href: "#solutions" },
   { name: "Services", href: "#services" },
+  { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" }
 ]
 

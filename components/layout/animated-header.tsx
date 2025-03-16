@@ -39,10 +39,14 @@ export function AnimatedHeader() {
             href="/" 
             className="flex items-center gap-3 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-600/20 flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-blue-600/30 transition-all duration-300">
-              <span className="text-blue-400 font-bold text-xl">A</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center transition-all duration-300">
+              <img 
+                src="/logo.png" 
+                alt="March Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
-            <span className="text-lg font-medium tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-slate-200">
+            <span className="text-lg font-medium tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-slate-200">
               {SITE_CONFIG.name}
             </span>
           </Link>

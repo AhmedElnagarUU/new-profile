@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 import { SITE_CONFIG } from "@/lib/constants"
-import { Code2, Server, Cloud } from "lucide-react"
+import { Building2, Network, Lightbulb } from "lucide-react"
 import { useEffect, useState } from "react"
 
 interface StarParticle {
@@ -20,7 +20,6 @@ export function LandingHero() {
   useEffect(() => {
     setMounted(true)
     const generateParticles = () => {
-      // Reduce particle count on mobile
       const particleCount = isMobile ? 20 : 50
       return Array.from({ length: particleCount }, () => ({
         left: `${Math.random() * 100}%`,
@@ -31,7 +30,6 @@ export function LandingHero() {
     setParticles(generateParticles())
   }, [isMobile])
 
-  // Simplified animations for reduced motion/mobile
   const baseTransition = { duration: prefersReducedMotion ? 0 : 0.8 }
   const orbTransition = { 
     duration: prefersReducedMotion ? 0 : 8, 
@@ -43,7 +41,6 @@ export function LandingHero() {
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20" id="hero">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
-        {/* Stars */}
         {mounted && !prefersReducedMotion && (
           <div className="absolute inset-0">
             {particles.map((particle, i) => (
@@ -71,7 +68,6 @@ export function LandingHero() {
           </div>
         )}
         
-        {/* Glowing orbs - simplified for mobile */}
         {!prefersReducedMotion && (
           <>
             <motion.div
@@ -105,13 +101,24 @@ export function LandingHero() {
             transition={baseTransition}
             style={{ willChange: "transform", transform: "translateZ(0)" }}
           >
+            {/* March Logo */}
+            <div className="mb-8">
+              <motion.img
+                src="/logo.png"
+                alt="March Logo"
+                className="h-24 mx-auto"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={baseTransition}
+              />
+            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-3xl lg:text-5xl">
               <span className="bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent">
-                Full Stack Developer
+                Transform Your Business
               </span>
               <br />
               <span className="bg-gradient-to-r from-blue-100 via-blue-400 to-blue-100 bg-clip-text text-transparent mt-2 block">
-                Building Digital Experiences
+                With Digital Innovation
               </span>
             </h1>
           </motion.div>
@@ -126,12 +133,12 @@ export function LandingHero() {
             {SITE_CONFIG.description}
           </motion.p>
 
-          {/* Tech Stack Icons */}
+          {/* Service Highlights */}
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {[
-              { icon: <Code2 className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Frontend Development" },
-              { icon: <Server className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Backend Systems" },
-              { icon: <Cloud className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cloud Infrastructure" },
+              { icon: <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Enterprise Solutions" },
+              { icon: <Network className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Cloud Infrastructure" },
+              { icon: <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6" />, label: "Digital Innovation" },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -154,29 +161,6 @@ export function LandingHero() {
           </div>
         </div>
       </div>
-
-      {/* Animated connection lines - disabled on mobile and reduced motion */}
-      {!isMobile && !prefersReducedMotion && (
-        <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
-          <motion.path
-            d="M 100 100 Q 300 0, 500 100 T 900 100"
-            stroke="url(#gradient)"
-            strokeWidth="2"
-            fill="none"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 2, ease: "easeInOut" }}
-            style={{ willChange: "transform", transform: "translateZ(0)" }}
-          />
-          <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(59, 130, 246, 0.2)" />
-              <stop offset="50%" stopColor="rgba(147, 51, 234, 0.2)" />
-              <stop offset="100%" stopColor="rgba(59, 130, 246, 0.2)" />
-            </linearGradient>
-          </defs>
-        </svg>
-      )}
     </section>
   )
 } 
